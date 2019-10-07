@@ -108,7 +108,20 @@ public class DobbeltLenketListe<T> implements Liste<T> {
 
     @Override
     public void nullstill() {
-        throw new NotImplementedException();
+        Node<T> p = hode, q;
+
+        while (p != null)
+        {
+            q = p.neste;
+            p.neste = null;
+            p.verdi = null;
+            p = q;
+        }
+
+        hode = hale = null;
+
+        endringer++;
+        antall = 0;
     }
 
     @Override
@@ -122,11 +135,12 @@ public class DobbeltLenketListe<T> implements Liste<T> {
 
     @Override
     public Iterator<T> iterator() {
-        throw new NotImplementedException();
+        return  new DobbeltLenketListeIterator();
     }
 
     public Iterator<T> iterator(int indeks) {
-        throw new NotImplementedException();
+        indeksKontroll(indeks, false);
+        return new DobbeltLenketListeIterator(indeks);
     }
 
     private class DobbeltLenketListeIterator implements Iterator<T>
@@ -136,21 +150,37 @@ public class DobbeltLenketListe<T> implements Liste<T> {
         private int iteratorendringer;
 
         private DobbeltLenketListeIterator(){
-            throw new NotImplementedException();
+            denne = hode;
+            fjernOK = false;                    // blir sann når next() kalles
+            iteratorendringer = endringer;
         }
 
         private DobbeltLenketListeIterator(int indeks){
-            throw new NotImplementedException();
+            denne = finnNode(indeks);
+            fjernOK = false;
+            iteratorendringer = endringer;
         }
 
         @Override
         public boolean hasNext(){
-            throw new NotImplementedException();
+            return denne != null;
         }
 
         @Override
         public T next(){
-            throw new NotImplementedException();
+            if(endringer != iteratorendringer) { throw new
+                    ConcurrentModificationException("Listen er endret!");
+            }
+
+            if (!hasNext()) {
+                throw new NoSuchElementException("Tom eller Ingen verdier!");
+            }
+
+            fjernOK = true;
+            T denneVerdi = denne.verdi;
+            denne = denne.neste;
+
+            return denneVerdi;
         }
 
         @Override
