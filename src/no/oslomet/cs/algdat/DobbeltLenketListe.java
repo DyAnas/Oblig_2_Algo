@@ -53,7 +53,21 @@ public class DobbeltLenketListe<T> implements Liste<T> {
     }
 
     public Liste<T> subliste(int fra, int til){
-        throw new NotImplementedException();
+        fratilKontroll (antall, fra, til);
+        DobbeltLenketListe<T> liste = new DobbeltLenketListe<T> ();
+        Node<T> q = hode;
+        int i = fra;
+
+
+        for (; i < til; i++) {
+            q = finnNode (i);
+            if (q != null) {
+                liste.leggInn (q.verdi);
+                q = q.neste;
+            }
+        }
+        return liste;
+
     }
 
     @Override
@@ -71,6 +85,34 @@ public class DobbeltLenketListe<T> implements Liste<T> {
         throw new NotImplementedException();
     }
 
+    private Node<T> finnNode(int indeks) {
+        Node<T> p;
+
+        if (indeks < antall / 2) {
+            p = hode;
+            for (int i = 0; i < indeks; i++) p = p.neste;
+        } else {
+            p = hale;
+            for (int i = antall - 1; i > indeks; i--) p = p.forrige;
+        }
+
+        return p;
+    }
+
+    public static void fratilKontroll(int tablengde, int fra, int til) {
+        if (fra < 0)                             // fra er negativ
+            throw new IndexOutOfBoundsException
+                    ("fra(" + fra + ") er negativ!");
+
+        if (til > tablengde)                     // til er utenfor tabellen
+            throw new IndexOutOfBoundsException
+                    ("til(" + til + ") > tablengde(" + tablengde + ")");
+
+        if (fra > til)                           // fra er større enn til
+            throw new IllegalArgumentException
+                    ("fra(" + fra + ") > til(" + til + ") - illegalt intervall!");
+    }
+
     @Override
     public void leggInn(int indeks, T verdi) {
         throw new NotImplementedException();
@@ -78,22 +120,36 @@ public class DobbeltLenketListe<T> implements Liste<T> {
 
     @Override
     public boolean inneholder(T verdi) {
-        throw new NotImplementedException();
+        return indeksTil (verdi) != -1;
     }
 
     @Override
     public T hent(int indeks) {
-        throw new NotImplementedException();
+        indeksKontroll (indeks, false);
+        return finnNode (indeks).verdi;
     }
 
     @Override
     public int indeksTil(T verdi) {
-        throw new NotImplementedException();
+        if (verdi == null) return -1;
+        Node<T> p = hode;
+        for (int i = 0; i < antall; i++) {
+            if (p.verdi.equals (verdi)) return i;
+            p = p.neste;
+        }
+        return -1;
     }
 
     @Override
     public T oppdater(int indeks, T nyverdi) {
-        throw new NotImplementedException();
+
+        Objects.requireNonNull (nyverdi, "Ikke tillat med null-verdier");
+        indeksKontroll (indeks, false);
+        Node<T> p = finnNode (indeks);
+        T gamleverdi = p.verdi;
+        p.verdi = nyverdi;
+        endringer++; // oppdatere en endring
+        return gamleverdi;
     }
 
     @Override
