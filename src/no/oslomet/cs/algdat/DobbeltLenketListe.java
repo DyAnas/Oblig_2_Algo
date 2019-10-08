@@ -133,6 +133,7 @@ public class DobbeltLenketListe<T> implements Liste<T> {
         else hale = hale.neste = new Node<>(verdi,hale,null);
 
         antall++;
+        endringer++;
         return true;
     }
 
