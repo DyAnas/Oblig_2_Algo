@@ -160,7 +160,7 @@ public class DobbeltLenketListe<T> implements Liste<T> {
         Node<T> p= hode;
         if (p==null) return false; //  return false hvis node er lik null
         while (p !=null){
-            if (p.verdi.equals (verdi)){
+            if (p.verdi.equals(verdi)){
                 break;
             }
             p=p.neste;
