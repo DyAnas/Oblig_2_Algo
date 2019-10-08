@@ -167,7 +167,28 @@ public class DobbeltLenketListe<T> implements Liste<T> {
 
     @Override
     public void leggInn(int indeks, T verdi) {
-        throw new NotImplementedException();
+        if (indeks < 0 || indeks > antall)
+            throw new IndexOutOfBoundsException ();
+        if (verdi == null) throw new NullPointerException ();
+        if (indeks == 0) {
+            Node<T> p = new Node<> (verdi);
+            p.neste = hode;
+            hode.forrige = p;
+            hode = p;
+        } else if (indeks == antall ()) {
+            Node<T> q = new Node<T> (verdi);
+            hale.neste = q;
+            q.forrige = hale;
+            hale = q;
+        } else {
+            Node<T> p = hode;
+            for (int i = 0; i < indeks; i++) p = p.neste;
+            Node<T> q = new Node<T> (verdi, p.forrige, p);
+            p = q;
+            q.forrige.neste = p.neste.forrige = p;
+        }
+        antall++;
+        endringer++;
     }
 
     @Override
