@@ -226,36 +226,38 @@ public class DobbeltLenketListe<T> implements Liste<T> {
 
     @Override
     public boolean fjern(T verdi) {
-        if (verdi==null){
+        (verdi == null) return false;
+        Node<T> p = hode;
+        while (p != null)
+        {
+            if (p.verdi.equals(verdi)) break;
+            p = p.neste;
+        }
+        if (p == null)
+        {
             return false;
         }
-        Node<T> p= hode;
-        if (p==null) return false; //  return false hvis node er lik null
-        while (p !=null){
-            if (p.verdi.equals(verdi)){
-                break;
-            }
-            p=p.neste;
+        else if (antall == 1)
+        {
+            hode = hale = null;
         }
-        // fjerne node hvis den ligger i første
-        if (p==hode){
+        else if (p == hode)
+        {
             hode = hode.neste;
-            if (hode != null){
-                hode.forrige=null;
-            }else{
-                hale=null;
-            }
+            hode.forrige = null;
         }
-        // hvis node ligger bakerst
-        else if (hode ==null){
+        else if (p == hale)
+        {
             hale = hale.forrige;
-            hale.neste=null;
-        } else {
-            p.forrige.neste=p.neste;
-            p.neste.forrige=p.forrige;
+            hale.neste = null;
         }
-        p.verdi=null;
-        p.forrige=p.neste=null;
+        else
+        {
+            p.forrige.neste = p.neste;
+            p.neste.forrige = p.forrige;
+        }
+        p.verdi = null;
+        p.forrige = p.neste = null;
         antall--;
         endringer++;
         return true;
@@ -263,27 +265,44 @@ public class DobbeltLenketListe<T> implements Liste<T> {
 
     @Override
     public T fjern(int indeks) {
-        indeksKontroll (indeks, false);
-        Node<T> p ;
-        if (indeks==0){
-            p = hode;
-            hode= hode.neste;
-            hode.forrige= null;
-        }
-        else if (indeks == antall-1){
-            p=hale;
-            hale=hale.forrige;
-            hale.neste=null;
-        }
-        else{
-            Node <T>q=finnNode (indeks-1);
-            p= q.neste;
-            p.neste= p.neste.neste;
-            p.neste.forrige=p;
+        indeksKontroll(indeks,false);
+        if(tom()) return null;
+        Node<T> node;
+        T verdi;
+        if (antall == 1){
+            verdi = hode.verdi;
+            hode = hale = null;
+        }else if(indeks == 0){
+            if(antall == 2){
+                hode = hale;
+                hale.neste = null;
+                hode.forrige = null;
+            }else{
+                node = hode.neste;
+                node.forrige = null;
+                hode = node;
+            }
+            verdi = hode.verdi;
+        } else if (indeks == antall-1){
+            if (antall == 2){
+                hale = hode;
+                hale.neste = null;
+                hode.forrige = null;
+            }else{
+                node = hale.forrige;
+                node.neste = null;
+                hale = node;
+            }
+            verdi = hale.verdi;
+        } else{
+            node = finnNode(indeks);
+            verdi = node.verdi;
+            node.neste.forrige = node.forrige;
+            node.forrige.neste = node.neste;
         }
         antall--;
         endringer++;
-        return p.verdi;
+        return verdi;
     }
 
     @Override
