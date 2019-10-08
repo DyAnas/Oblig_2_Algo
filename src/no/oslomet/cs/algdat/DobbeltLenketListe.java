@@ -399,13 +399,50 @@ public class DobbeltLenketListe<T> implements Liste<T> {
 
         @Override
         public void remove(){
-            throw new NotImplementedException();
+
+            if(iteratorendringer != endringer){
+                throw new ConcurrentModificationException();}
+            if (fjernOK == false){
+                throw new IllegalStateException();}
+
+            if (antall == 1){
+                //hvis lengden bare er en node
+                hode = hale = null;
+            } else if (denne == null){
+                //nullstiller fra høyre
+                hale = hale.forrige;
+                hale.neste = null;
+            } else if (denne.forrige == hode){
+                //nullstiller fra venstre
+                hode = hode.neste;
+                hode.forrige = null;
+            } else{
+                //flytter alt mot venstre
+                denne.forrige.forrige.neste = denne;
+                denne.forrige = denne.forrige.forrige;
+            }
+            fjernOK = false;
+            antall--;
+            endringer++;
+            iteratorendringer++;
         }
 
     } // class DobbeltLenketListeIterator
 
     public static <T> void sorter(Liste<T> liste, Comparator<? super T> c) {
-        throw new NotImplementedException();
+
+        T temp;
+        boolean sluttPaaListe = false;
+        for (int i = 0; i < liste.antall() -1; i++){
+            if (c.compare(liste.hent(i), liste.hent(i+1)) > 0){
+                sluttPaaListe = true;
+                temp = liste.hent(i);
+                liste.oppdater(i, liste.hent(i+1));
+                liste.oppdater(i+1, temp);
+            }
+        }
+        if (sluttPaaListe){sorter(liste, c);}
+
     }
 
 } // class DobbeltLenketListe
