@@ -227,32 +227,47 @@ public class DobbeltLenketListe<T> implements Liste<T> {
 
     @Override
     public boolean fjern(T verdi) {
-        if (verdi==null){
+     /*   if (verdi==null){
             return false;
         }
-        Node<T> p= hode;
-        if (p==null) return false; //  return false hvis node er lik null
+      Node<T> p= hode;
+
         while (p !=null){
             if (p.verdi.equals(verdi)){
                 break;
             }
             p=p.neste;
         }
-        // fjerne node hvis den ligger i første
-        if (p==hode){
+        if (p==null) return false;
+
+        else if (antall==1){
             hode = hode.neste;
             if (hode != null){
+                hode=hale=null;
+            }else if (p == hode){
+                hode = hode.neste;
                 hode.forrige=null;
-            }else{
-                hale=null;
             }
+             else if ( p == hale ){
+                 hale =hale.forrige;
+                 hale.neste=null;
+             }
+              else{
+                  p.forrige.neste=p.neste;
+                  p.neste.forrige=p.forrige;
+            }
+              p.verdi=null;
+              p.forrige=p.neste=null;
+              antall--;
+              endringer++;
+              return true;
         }
         // hvis node ligger bakerst
         else if (hale ==null){
             hale = hale.forrige;
             hale.neste=null;
-        } else {
-          Node<T> r = p.forrige;
+        }else{
+            Node<T> r =hode;
             r.neste=p.neste;
             p.neste.forrige=r;
             p.forrige=p.neste=null;
@@ -262,32 +277,87 @@ public class DobbeltLenketListe<T> implements Liste<T> {
 
         antall--;
         endringer++;
+        return true;*/
+        if (verdi == null) return false;
+
+        Node<T> p = hode;
+
+        while (p != null) {
+            if (p.verdi.equals(verdi)) {
+                break;
+            }
+
+            p = p.neste;
+        }
+
+        if (p == null) return false;
+
+        if (p == hode) { // Første node
+            hode = hode.neste;
+
+            if (hode != null) {
+                hode.forrige = null;
+            } else {
+                hale = null;
+            }
+        } else if (p == hale) { // Siste node
+            hale = hale.forrige;
+            hale.neste = null;
+        } else {
+            p.forrige.neste = p.neste;
+            p.neste.forrige = p.forrige;
+        }
+
+        p.verdi = null;
+        p.forrige = p.neste = null;
+
+        antall--;
+        endringer++;
+
         return true;
+
     }
 
     @Override
     public T fjern(int indeks) {
-        indeksKontroll (indeks, false);
-        Node<T> p ;
-        if (indeks==0){
-            p = hode;
-            hode= hode.neste;
-            hode.forrige= null;
-        }
-        else if (indeks == antall-1){
-            p=hale;
-            hale=hale.forrige;
-            hale.neste=null;
-        }
-        else{
-            Node <T>q=finnNode (indeks-1);
-            p= q.neste;
-            p.neste= p.neste.neste;
-            p.neste.forrige=p;
+        indeksKontroll(indeks,false);
+        if(tom()) return null;
+        Node<T> node;
+        T verdi;
+        if (antall == 1){
+            verdi = hode.verdi;
+            hode = hale = null;
+        }else if(indeks == 0){
+            if(antall == 2){
+                hode = hale;
+                hale.neste = null;
+                hode.forrige = null;
+            }else{
+                node = hode.neste;
+                node.forrige = null;
+                hode = node;
+            }
+            verdi = hode.verdi;
+        } else if (indeks == antall-1){
+            if (antall == 2){
+                hale = hode;
+                hale.neste = null;
+                hode.forrige = null;
+            }else{
+                node = hale.forrige;
+                node.neste = null;
+                hale = node;
+            }
+            verdi = hale.verdi;
+        } else{
+            node = finnNode(indeks);
+            verdi = node.verdi;
+            node.neste.forrige = node.forrige;
+            node.forrige.neste = node.neste;
         }
         antall--;
         endringer++;
-        return p.verdi;
+        return verdi;
     }
 
     @Override
@@ -308,7 +378,7 @@ public class DobbeltLenketListe<T> implements Liste<T> {
         antall = 0;
     }
 
-    @Override
+ /*   @Override
     public String toString() {
         StringBuilder s = new StringBuilder();
         s.append('[');
@@ -328,9 +398,39 @@ public class DobbeltLenketListe<T> implements Liste<T> {
         }
         s.append(']');
         return s.toString();
+    }*/
+
+    @Override
+    public String toString() {
+
+        StringBuilder s = new StringBuilder ();
+
+        s.append ('[');
+
+        if (!tom ()) {
+            Node<T> p = hode;
+
+            if (p.verdi != null)
+                s.append (p.verdi);
+
+            p = p.neste;
+
+
+            while (p != null)  // tar med resten hvis det er noe mer
+            {
+
+                if (p.verdi != null) s.append (',').append (' ').append (p.verdi);
+                p = p.neste;
+            }
+        }
+
+        s.append (']');
+
+        return s.toString ();
     }
 
-    public String omvendtString() {
+
+/*    public String omvendtString() {
         StringBuilder s = new StringBuilder();
         s.append('[');
         if (antall!=0) {
@@ -349,8 +449,32 @@ public class DobbeltLenketListe<T> implements Liste<T> {
         }
         s.append(']');
         return s.toString();
+    }*/
+public String omvendtString() {
+    StringBuilder s = new StringBuilder ();
+
+    s.append ('[');
+
+    if (!tom ()) {
+        Node<T> p = hale;
+        if (p.verdi != null)
+            s.append (p.verdi);
+
+        p = p.forrige;
+
+        while (p != null)  // tar med resten hvis det er noe mer
+        {
+
+            if (p.verdi != null)
+                s.append (',').append (' ').append (p.verdi);
+            p = p.forrige;
+        }
     }
 
+    s.append (']');
+
+    return s.toString ();
+}
     @Override
     public Iterator<T> iterator() {
         return  new DobbeltLenketListeIterator();
