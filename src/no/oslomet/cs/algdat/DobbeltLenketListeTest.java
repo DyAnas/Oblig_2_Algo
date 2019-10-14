@@ -1,7 +1,5 @@
 package no.oslomet.cs.algdat;
 
-import com.oracle.xmlns.internal.webservices.jaxws_databinding.SoapBindingUse;
-
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -205,6 +203,7 @@ class DobbeltLenketListeTest {
         liste.leggInn(2);
 
         s = liste.toString();
+        System.out.println(s);
         if (!s.equals("[1, 2]")) {
             antallFeil++;
             System.out.println
@@ -669,7 +668,7 @@ class DobbeltLenketListeTest {
         }
 
         liste = new DobbeltLenketListe<>(new String[]{"A", "B", "C", "D", "E", "F", "G"});
-        System.out.println (liste.toString ());
+
 
         try {
             liste.fjern(7);
@@ -699,14 +698,14 @@ class DobbeltLenketListeTest {
             antallFeil++;
             System.out.println("Oppgave 6ga: Feil returverdi i metoden fjern(indeks)!");
         }
-        System.out.println (" fjern d"+ liste.toString ());
+
 
         if (liste.antall() != 6) {
             antallFeil++;
             System.out.println("Oppgave 6gb: Feil i antall-oppdateringen i fjern(indeks)!");
             System.out.println("             Reduseres ikke antall? Reduserers den to ganger!");
         }
-        System.out.println (liste.toString ());
+
         liste.fjern(0);  // fjerner A
 
         liste.fjern(4);  // fjerner G
@@ -719,38 +718,38 @@ class DobbeltLenketListeTest {
         if (!liste.toString().equals("[B, C, E, F]")) {
             antallFeil++;
             System.out.println("Oppgave 6i: Feil i fjern(indeks)-metoden!");
-        }     System.out.println (liste.toString ());
+        }
 
         if (!liste.omvendtString().equals("[F, E, C, B]")) {
             antallFeil++;
             System.out.println("Oppgave 6j: Feil i fjern(indeks)-metoden!");
-        } System.out.println (liste.omvendtString ());
+        }
 
         liste.leggInn("H");
         liste.leggInn("I");
-        System.out.println (liste.toString ());
+
         if (liste.fjern(" ") == true
                 || liste.fjern("G") == true
                 || liste.fjern("J") == true) {
             antallFeil++;
             System.out.println("Oppgave 6ka: Feil returverdi i metoden fjern(T)!");
         }
-        System.out.println ("liste 1"+liste.toString ());
+
         liste.leggInn("B");
-        System.out.println ("liste 2"+liste.toString ());
+
         liste.fjern("B");
-        System.out.println ("liste 3"+liste.toString ());
+
         if (liste.antall() != 6) {
             antallFeil++;
             System.out.println("Oppgave 6kb: Feil i antall-oppdateringen i fjern(T)!");
             System.out.println("             Reduseres ikke antall? Reduserers den to ganger!");
         }
-        System.out.println (liste.toString ());
+
         if (!liste.toString().equals("[C, E, F, H, I, B]")) {
             antallFeil++;
             System.out.println("Oppgave 6kc: Skal fjerne første forekomst hvis flere like!");
         }
-        System.out.println ("fjern b"+liste.antall());
+
         liste.fjern("B");
 
         if (liste.fjern("F") != true
@@ -1173,7 +1172,7 @@ class DobbeltLenketListeTest {
         for (Iterator<Integer> i = liste.iterator(); i.hasNext(); ) {
             int verdi = i.next();
             if (verdi % 2 == 1) {
-                i.remove(); // fjerner oddetallene
+                 i.remove(); // fjerner oddetallene
             }
         }
 

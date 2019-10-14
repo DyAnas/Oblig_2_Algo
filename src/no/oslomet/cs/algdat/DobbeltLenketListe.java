@@ -166,7 +166,7 @@ public class DobbeltLenketListe<T> implements Liste<T> {
 
     @Override
     public void leggInn(int indeks, T verdi) {
-        if (indeks < 0 || indeks > antall)
+        if (indeks < 0 || indeks > antall())
             throw new IndexOutOfBoundsException ();
         if (verdi == null) throw new NullPointerException ();
         if (indeks == 0) {
@@ -337,7 +337,9 @@ public class DobbeltLenketListe<T> implements Liste<T> {
             while (noden != null) {
                 if (noden.verdi != null){
                     s.append(',');
+                    s.append(' ');
                     s.append(noden.verdi);
+
                 }
                 noden = noden.neste;
             }
@@ -358,6 +360,7 @@ public class DobbeltLenketListe<T> implements Liste<T> {
             while (noden != null) {
                 if (noden.verdi != null){
                     s.append(',');
+                    s.append(' ');
                     s.append(noden.verdi);
                 }
                 noden = noden.forrige;
