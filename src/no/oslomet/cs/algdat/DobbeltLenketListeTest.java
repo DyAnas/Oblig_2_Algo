@@ -610,7 +610,7 @@ class DobbeltLenketListeTest {
         }
 
         liste = new DobbeltLenketListe<>();
-     
+
         try {
             liste.leggInn(0, 4);
         } catch (Exception e) {

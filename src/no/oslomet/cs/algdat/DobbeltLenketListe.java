@@ -170,28 +170,7 @@ public class DobbeltLenketListe<T> implements Liste<T> {
         if (indeks < 0 || indeks > antall()){
             throw new IndexOutOfBoundsException ();}
         if (verdi == null) throw new NullPointerException ();
-       /* else if ( hale == null && hode == null){
-            Node<T> p = new Node<T> (verdi);
-            hode = p;
-            hale = p;
-        }
-      else  if (indeks == 0) {
-            Node<T> p = new Node<> (verdi);
-            hode.neste = p;
-            p.forrige = hode;
 
-        } else if (indeks == antall) {
-            Node<T> q = new Node<T> (verdi);
-            hale.neste = q;
-            q.forrige = hale;
-            hale = q;
-        } else {
-            Node<T> p = hode;
-            for (int i = 0; i < indeks; i++) p = p.neste;
-            Node<T> q = new Node<T> (verdi, p.forrige, p);
-            p = q;
-            q.forrige.neste = p.neste.forrige = p;
-        }*/
         if (antall == 0 && indeks == 0) {
             Node<T> q = new Node<T> (verdi, null, null);
             hode = hale =q;
